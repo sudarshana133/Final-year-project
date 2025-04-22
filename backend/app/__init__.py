@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 import os
+from .routes.forecast_routes import forecast_bp
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -22,5 +23,6 @@ def create_app():
 
     from .auth.routes import auth_bp
     app.register_blueprint(auth_bp, url_prefix="/api")
+    app.register_blueprint(forecast_bp, url_prefix="/api/forecast")
 
     return app
