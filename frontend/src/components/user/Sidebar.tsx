@@ -64,7 +64,7 @@ const Sidebar: React.FC = () => {
         </ul>
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full p-4 border-t border-gray-200">
+      <div className="absolute bottom-0 left-0 w-full p-4 border-gray-200">
         <div className="flex items-center space-x-3">
           <button
             className="flex items-center p-2 text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-900 w-full hover:cursor-pointer"
