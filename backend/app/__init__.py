@@ -5,6 +5,7 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 import os
 from .routes.forecast_routes import forecast_bp
+from .routes.disasters import disaster_bp
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -12,7 +13,7 @@ jwt = JWTManager()
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)
+    CORS(app,supports_credentials=True)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://admin:adminpass@localhost:5432/disaster_db')
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'secret-key')
@@ -24,5 +25,6 @@ def create_app():
     from .auth.routes import auth_bp
     app.register_blueprint(auth_bp, url_prefix="/api")
     app.register_blueprint(forecast_bp, url_prefix="/api/forecast")
+    app.register_blueprint(disaster_bp, url_prefix="/api/disasters")
 
     return app

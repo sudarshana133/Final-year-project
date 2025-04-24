@@ -1,11 +1,18 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-const LoginPage = lazy(() => import("./pages/Login"));
-const DashboardWeather = lazy(() => import("./pages/DashboardWeather"));
-const DashboardDisaster = lazy(() => import("./pages/DashboardDisaster"));
-const Chatbot = lazy(() => import("./pages/Chatbot"));
-const NotFound = lazy(() => import("./pages/Notfound"));
-const Register = lazy(() => import("./pages/Register"));
+const LoginPage = lazy(() => import("./pages/user/Login"));
+const DashboardWeather = lazy(
+  () => import("./pages/user/PrecipitationDashboard")
+);
+const Earthquake = lazy(() => import("./pages/user/Earthquake"));
+const Chatbot = lazy(() => import("./pages/user/Chatbot"));
+const NotFound = lazy(() => import("./pages/user/Notfound"));
+const Register = lazy(() => import("./pages/user/Register"));
+const UserLayout = lazy(() => import("./components/user/UserLayout"));
+const ProtectedRoute = lazy(() => import("./components/shared/ProtectedRoute"));
+const Flood = lazy(() => import("./pages/user/Flood"));
+const LandSlide = lazy(() => import("./pages/user/LandSlides"));
+const Cyclones = lazy(() => import("./pages/user/Cyclones"));
 
 const App = () => {
   return (
@@ -13,10 +20,18 @@ const App = () => {
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route path="/" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/dashboard/weather" element={<DashboardWeather />} />
-          <Route path="/dashboard/disaster" element={<DashboardDisaster />} />
-          <Route path="/chatbot" element={<Chatbot />} />
+          <Route element={<ProtectedRoute allowedRoles="user" />}>
+            <Route path="/dashboard" element={<UserLayout />}>
+              <Route index path="rainfall" element={<DashboardWeather />} />
+              <Route path="earthquakes" element={<Earthquake />} />
+              <Route path="floods" element={<Flood />} />
+              <Route path="landslides" element={<LandSlide />} />
+              <Route path="cyclones" element={<Cyclones />} />
+              <Route path="chatbot" element={<Chatbot />} />
+            </Route>
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

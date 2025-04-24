@@ -1,4 +1,4 @@
-import { TrendDataPoint } from "../pages/DashboardWeather";
+import { TrendDataPoint } from "../pages/user/PrecipitationDashboard";
 
 interface TooltipProps {
   active?: boolean;

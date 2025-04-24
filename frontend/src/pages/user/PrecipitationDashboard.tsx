@@ -10,8 +10,9 @@ import {
   Legend,
   ResponsiveContainer,
   Scatter,
+  ComposedChart,
 } from "recharts";
-import CustomTooltip from "../components/CustomToolTip";
+import CustomTooltip from "../../components/CustomToolTip";
 
 interface SarimaDataPoint {
   month: string;
@@ -70,7 +71,6 @@ const DashboardWeather = () => {
         setRegressionLine(regression);
       });
   }, []);
-
   return (
     <div className="p-6">
       <h2 className="text-xl font-semibold mb-4">
@@ -96,35 +96,47 @@ const DashboardWeather = () => {
         <h2 className="text-xl font-semibold mb-4">
           Global Warming Trend (Avg Temp by Year)
         </h2>
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
-              dataKey="year"
-              type="number"
-              domain={["dataMin", "dataMax"]}
-              tickFormatter={(tick) => tick.toString()}
-            />
-            <YAxis domain={["auto", "auto"]} />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend />
-            {/* Ensure both data sets are used correctly */}
-            <Scatter
-              name="Avg Temp"
-              data={trendData}
-              fill="#8884d8"
-              line={false}
-            />
-            <Line
-              name="Trend Line"
-              data={regressionLine}
-              type="monotone"
-              dataKey="tavg"
-              stroke="#ff7300"
-              dot={false}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+        <div className="p-6">
+          <h2 className="text-xl font-semibold mb-4">
+            Global Warming Trend (1990-2022)
+          </h2>
+          <ResponsiveContainer width="100%" height={400}>
+            <ComposedChart data={trendData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="year"
+                type="number"
+                domain={["dataMin", "dataMax"]}
+                tickFormatter={(tick) => tick.toString()}
+              />
+              <YAxis
+                domain={[25, 28]}
+                label={{
+                  value: "Temperature (°C)",
+                  angle: -90,
+                  position: "insideLeft",
+                }}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend />
+              <Scatter
+                name="Historical Temperatures"
+                data={trendData}
+                fill="#8884d8"
+                dataKey="tavg"
+              />
+              <Line
+                name="Trend Line"
+                data={regressionLine}
+                type="linear"
+                dataKey="tavg"
+                stroke="#ff7300"
+                dot={false}
+                strokeWidth={2}
+              />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );

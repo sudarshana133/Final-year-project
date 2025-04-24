@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
 from app import db
@@ -29,5 +29,7 @@ def login():
     user = User.query.filter_by(email=data["email"]).first()
     if user and check_password_hash(user.password_hash, data["password"]):
         access_token = create_access_token(identity={"id": user.id, "role": user.role})
-        return jsonify({"token": access_token}), 200
+        response = make_response('Setting the cookie')
+        response.set_cookie('token',access_token)
+        return response, 200
     return jsonify({"error": "Invalid credentials"}), 401

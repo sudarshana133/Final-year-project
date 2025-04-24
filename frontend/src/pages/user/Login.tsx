@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [location, setLocation] = useState("");
   const [message, setMessage] = useState("");
-
+  const navigate = useNavigate();
   const detectLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -38,14 +39,18 @@ function LoginPage() {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/login", {
-        email,
-        password,
-        location,
-      });
+      const res = await axios.post(
+        "http://localhost:5000/api/login",
+        {
+          email,
+          password,
+          location,
+        },
+        { withCredentials: true }
+      );
       const { token } = res.data;
       localStorage.setItem("token", token);
-      window.location.href = "/dashboard/weather";
+      navigate("/dashboard");
     } catch (err: unknown) {
       setMessage("Login failed. Please check your credentials.");
       console.error(err);
@@ -91,7 +96,7 @@ function LoginPage() {
 
         <button
           onClick={handleLogin}
-          className="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition"
+          className="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition hover:cursor-pointer"
         >
           Login
         </button>
