@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import { tokenPayload } from "../../types/types";
+import { jwtDecode } from "jwt-decode";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -9,13 +12,14 @@ function LoginPage() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const detectLocation = () => {
+    console.log("hi");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const lat = pos.coords.latitude.toFixed(5);
           const lon = pos.coords.longitude.toFixed(5);
           setLocation(`${lat}, ${lon}`);
-          setMessage(""); // clear any previous error
+          setMessage("");
         },
         () => {
           setMessage(
@@ -39,7 +43,7 @@ function LoginPage() {
     }
 
     try {
-      const res = await axios.post(
+      await axios.post(
         "http://localhost:5000/api/login",
         {
           email,
@@ -48,9 +52,17 @@ function LoginPage() {
         },
         { withCredentials: true }
       );
-      const { token } = res.data;
-      localStorage.setItem("token", token);
-      navigate("/dashboard");
+      const token = Cookies.get("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+      const decodedToken: tokenPayload = jwtDecode(token);
+      if (decodedToken.sub.role === "user") {
+        navigate("/dashboard");
+      } else {
+        navigate("/admin");
+      }
     } catch (err: unknown) {
       setMessage("Login failed. Please check your credentials.");
       console.error(err);
@@ -88,7 +100,7 @@ function LoginPage() {
           />
           <button
             onClick={detectLocation}
-            className="bg-blue-500 text-white px-3 py-2 rounded-xl hover:bg-blue-600 text-sm"
+            className="bg-blue-500 text-white px-3 py-2 rounded-xl hover:bg-blue-600 text-sm hover:cursor-pointer"
           >
             Detect Location
           </button>

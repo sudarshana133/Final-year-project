@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { sidebarUserItems as sidebarItems } from "../../constants/sidebar";
+import { sidebarAdminItems as sidebarItems } from "../../constants/sidebar";
 import { LogOut } from "lucide-react";
 import Cookies from "js-cookie";
 

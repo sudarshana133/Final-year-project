@@ -24,7 +24,7 @@ export interface TrendDataPoint {
   tavg: number;
 }
 
-const DashboardWeather = () => {
+const PrecipitationDashboard = () => {
   const [sarimaData, setSarimaData] = useState<SarimaDataPoint[]>([]);
   const [trendData, setTrendData] = useState<TrendDataPoint[]>([]);
   const [regressionLine, setRegressionLine] = useState<TrendDataPoint[]>([]);
@@ -142,4 +142,4 @@ const DashboardWeather = () => {
   );
 };
 
-export default DashboardWeather;
+export default PrecipitationDashboard;

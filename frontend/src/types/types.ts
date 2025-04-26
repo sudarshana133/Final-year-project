@@ -6,9 +6,16 @@ type tokenPayload = {
     sub: {
         id: number;
         role: "admin" | "user";
+        email: string;
     };
     nbf: number;
     csrf: string;
     exp: number;
 }
-export type { tokenPayload };
+type User = {
+    email: string;
+    id: number;
+    location: string;
+    name: string;
+}
+export type { tokenPayload, User };

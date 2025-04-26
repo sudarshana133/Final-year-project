@@ -26,9 +26,15 @@ def register():
 @auth_bp.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
+    if data['location'] is None:
+        return jsonify({"error": "Location is required"}), 400
+    
     user = User.query.filter_by(email=data["email"]).first()
     if user and check_password_hash(user.password_hash, data["password"]):
-        access_token = create_access_token(identity={"id": user.id, "role": user.role})
+        location = data['location']
+        user.location = location
+        db.session.commit()
+        access_token = create_access_token(identity={"id": user.id, "role": user.role,"email": user.email})
         response = make_response('Setting the cookie')
         response.set_cookie('token',access_token)
         return response, 200

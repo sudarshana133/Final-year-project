@@ -23,8 +23,12 @@ def create_app():
     jwt.init_app(app)
 
     from .auth.routes import auth_bp
+    from .routes.current_weather import current_weather_bp
+    from .routes.admin.users import users_bp
+    
     app.register_blueprint(auth_bp, url_prefix="/api")
     app.register_blueprint(forecast_bp, url_prefix="/api/forecast")
     app.register_blueprint(disaster_bp, url_prefix="/api/disasters")
-
+    app.register_blueprint(current_weather_bp, url_prefix="/api/current_weather")
+    app.register_blueprint(users_bp, url_prefix="/api/admin")
     return app

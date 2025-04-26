@@ -1,5 +1,5 @@
 import React from "react";
-import { CloudHail, Activity } from "lucide-react";
+import { CloudHail, Activity, Home, Users } from "lucide-react";
 import { CycloneIcon, FloodIcon, LandslideIcon } from "../components/icons/Sidebar-Icons";
 type SidebarItem = {
   href: string;
@@ -7,7 +7,12 @@ type SidebarItem = {
   icon: React.ElementType;
 };
 
-const sidebarItems: SidebarItem[] = [
+const sidebarUserItems: SidebarItem[] = [
+  {
+    href: "/dashboard",
+    label: "Home",
+    icon: Home,
+  },
   {
     href: "/dashboard/rainfall",
     label: "Rainfall",
@@ -34,4 +39,16 @@ const sidebarItems: SidebarItem[] = [
     icon: CycloneIcon,
   },
 ];
-export default sidebarItems;
+const sidebarAdminItems: SidebarItem[] = [
+  {
+    href: "/admin",
+    label: "Home",
+    icon: Home,
+  },
+  {
+    href: "/admin/users",
+    label: "Users",
+    icon: Users,
+  },
+];
+export { sidebarUserItems, sidebarAdminItems };
