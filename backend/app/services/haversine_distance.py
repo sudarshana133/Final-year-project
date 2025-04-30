@@ -15,17 +15,27 @@ def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
 
 def users_within_radius(
     db: SQLAlchemy,
-    address: str,
+    location_addr: bool,
+    address: Optional[str],
+    lat: Optional[float],
+    lon: Optional[float],
     radius_km: float,
     user_model: Type[Any],
 ) -> List[Dict[str, Any]]:
-    target: Optional[tuple] = get_location(address)
-    if target is None:
-        raise ValueError("Unable to geocode the supplied address.")
-    tgt_lat, tgt_lon = target
+    if location_addr:
+        if not address:
+            raise ValueError("Address is required when location_addr is True.")
+        target: Optional[tuple] = get_location(address)
+        if target is None:
+            raise ValueError("Unable to geocode the supplied address.")
+        tgt_lat, tgt_lon = target
+    else:
+        if lat is None or lon is None:
+            raise ValueError("Latitude and longitude are required when location_addr is False.")
+        tgt_lat, tgt_lon = lat, lon
 
     # Bounding‑box pre‑filter ------------------------------------------------
-    DEG_KM   = 111.32
+    DEG_KM = 111.32
     delta_lat = radius_km / DEG_KM
     delta_lon = radius_km / (DEG_KM * cos(radians(tgt_lat)))
 
@@ -33,6 +43,7 @@ def users_within_radius(
         db.session.query(user_model)
         .filter(user_model.lat.between(tgt_lat - delta_lat, tgt_lat + delta_lat))
         .filter(user_model.lon.between(tgt_lon - delta_lon, tgt_lon + delta_lon))
+        .filter(user_model.role != "admin")
     )
 
     # Exact Haversine filter -------------------------------------------------
