@@ -21,14 +21,12 @@ app.get("/", (req: Request, res: Response) => {
     res.send("Hello World!");
 });
 
-app.post("/get-emails", async (req: Request, res: Response): Promise<any> => {
+app.post("/send-message", async (req: Request, res: Response): Promise<any> => {
     try {
-        const emails = req.body.emails;
+        const { emails, subject, body } = req.body;
 
         if (!Array.isArray(emails)) {
-            return res
-                .status(400)
-                .send("Invalid request. Expected 'emails' to be an array.");
+            return res.status(400).send("Invalid 'emails' array.");
         }
 
         for (const email of emails) {
@@ -37,7 +35,7 @@ app.post("/get-emails", async (req: Request, res: Response): Promise<any> => {
                 continue;
             }
 
-            await queue.add("email", email);
+            await queue.add("email", { emailId: email.emailId, subject, body });
         }
 
         res.send("Emails added to the queue.");
@@ -46,6 +44,7 @@ app.post("/get-emails", async (req: Request, res: Response): Promise<any> => {
         res.status(500).send("Internal Server Error");
     }
 });
+
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
 });

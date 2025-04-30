@@ -15,21 +15,19 @@ const transporter = nodemailer.createTransport({
 const worker = new Worker(
   "email-sender-queue",
   async (job) => {
-    const emailId = job.data.emailId;
-    console.log(`Processing email for: ${emailId}`);
-    // Send the email
+    const { emailId, subject, body } = job.data;
+
     try {
       const info = await transporter.sendMail({
-        from: process.env.EMAIL_ID,
+        from: '"Your Name" <your-email@gmail.com>',
         to: emailId,
-        subject: "Hello ✔",
-        text: "This is a test bulk email",
-        html: "<b>This is a test bulk email</b>",
+        subject: subject || "No Subject",
+        html: body || "<p>No content</p>",
       });
 
-      console.log(`Email sent to ${emailId}: ${info.messageId}`);
+      console.log(`Email sent to ${ emailId }: ${ info.messageId }`);
     } catch (error) {
-      console.error(`Failed to send email to ${emailId}:`, error);
+      console.error(`Failed to send email to ${ emailId }:`, error);
     }
   },
   {
