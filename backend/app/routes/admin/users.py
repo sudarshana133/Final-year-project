@@ -17,7 +17,8 @@ def get_users():
             "id": user.id,
             "name": user.name,
             "email": user.email,
-            "location": user.location
+            "lat": user.lat,
+            "lon": user.lon,
         } for user in users]
 
         return jsonify({
@@ -36,8 +37,7 @@ def search_users():
 
         users_query = User.query.filter(
             (User.name.ilike(f'%{query}%')) | 
-            (User.email.ilike(f'%{query}%')) |
-            (User.location.ilike(f'%{query}%'))
+            (User.email.ilike(f'%{query}%'))
         )
 
         pagination = users_query.paginate(page=page, per_page=per_page, error_out=False)
@@ -47,7 +47,8 @@ def search_users():
             "id": user.id,
             "name": user.name,
             "email": user.email,
-            "location": user.location
+            "lat": user.lat,
+            "lon": user.lon,
         } for user in users]
 
         return jsonify({

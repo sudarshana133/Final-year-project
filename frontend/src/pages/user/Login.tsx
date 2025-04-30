@@ -8,17 +8,18 @@ import { jwtDecode } from "jwt-decode";
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [location, setLocation] = useState("");
+  const [lat, setLat] = useState("");
+  const [lon, setLon] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const detectLocation = () => {
-    console.log("hi");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const lat = pos.coords.latitude.toFixed(5);
           const lon = pos.coords.longitude.toFixed(5);
-          setLocation(`${lat}, ${lon}`);
+          setLat(lat);
+          setLon(lon);
           setMessage("");
         },
         () => {
@@ -37,7 +38,7 @@ function LoginPage() {
   }, []);
 
   const handleLogin = async () => {
-    if (!location) {
+    if (!lat || !lon) {
       setMessage("Please enable location before logging in.");
       return;
     }
@@ -48,7 +49,8 @@ function LoginPage() {
         {
           email,
           password,
-          location,
+          lat,
+          lon,
         },
         { withCredentials: true }
       );
@@ -91,13 +93,24 @@ function LoginPage() {
         />
 
         <div className="flex items-center gap-2 mb-4">
-          <input
-            className="flex-1 px-4 py-2 border rounded-xl"
-            type="text"
-            value={location}
-            readOnly
-            placeholder="Location"
-          />
+          <div className="flex gap-2 flex-col">
+            <input
+              className="flex-1 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+              type="text"
+              name="lat"
+              placeholder="Latitude"
+              value={lat}
+              readOnly
+            />
+            <input
+              className="flex-1 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+              type="text"
+              name="lon"
+              placeholder="Longitude"
+              value={lon}
+              readOnly
+            />
+          </div>
           <button
             onClick={detectLocation}
             className="bg-blue-500 text-white px-3 py-2 rounded-xl hover:bg-blue-600 text-sm hover:cursor-pointer"

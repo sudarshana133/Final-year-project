@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { User } from "../../types/types";
-import { Trash2 } from "lucide-react"; // 🗑 Import trash icon
+import { Loader2, Trash2 } from "lucide-react"; // 🗑 Import trash icon
 
 const Users = () => {
   const [loading, setLoading] = useState(false);
@@ -85,8 +85,8 @@ const Users = () => {
 
       {/* Table */}
       {loading ? (
-        <div className="text-center text-gray-600 text-lg">
-          Loading users...
+        <div className="flex items-center justify-center h-64">
+          <Loader2 />
         </div>
       ) : users.length > 0 ? (
         <div className="overflow-x-auto">
@@ -111,12 +111,12 @@ const Users = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
+              {users.map((user: User) => (
                 <tr key={user.id} className="border-t hover:bg-gray-100">
                   <td className="py-3 px-6">{user.name}</td>
                   <td className="py-3 px-6">{user.email}</td>
-                  <td className="py-3 px-6">{user.location.split(",")[0]}</td>
-                  <td className="py-3 px-6">{user.location.split(",")[1]}</td>
+                  <td className="py-3 px-6">{user.lat}</td>
+                  <td className="py-3 px-6">{user.lon}</td>
                   <td className="py-3 px-6 text-center">
                     <button
                       onClick={() => deleteUser(user.id)}

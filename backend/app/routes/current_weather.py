@@ -23,9 +23,9 @@ def get_current_weather():
         return jsonify({"error": "Email ID is required"}), 400
     try:
         user = User.query.filter_by(email=email_id).first()
-        if user is None or not user.location:
+        if user is None or not user.lat or not user.lon:
             return jsonify({"error": "User's location not found"}), 404
-        user_location = user.location
+        user_location = f"{user.lat},{user.lon}"
         if user_location == "":
             return jsonify({"error": "User's location not found"}), 404
         

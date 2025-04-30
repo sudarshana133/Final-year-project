@@ -17,7 +17,8 @@ def register():
         email=data["email"],
         password_hash=generate_password_hash(data["password"]),
         role=data.get("role", "user"),
-        location=data.get("location", "")
+        lat = data.get("lat",""),
+        lon = data.get("lon",""),
     )
     db.session.add(new_user)
     db.session.commit()
@@ -26,16 +27,18 @@ def register():
 @auth_bp.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
-    if data['location'] is None:
+    if not data.get("lat") or not data.get("lon"):
         return jsonify({"error": "Location is required"}), 400
     
     user = User.query.filter_by(email=data["email"]).first()
     if user and check_password_hash(user.password_hash, data["password"]):
-        location = data['location']
-        user.location = location
+        lat = data['lat']
+        lon = data['lon']
+        user.lat = lat
+        user.lon = lon
         db.session.commit()
         access_token = create_access_token(identity={"id": user.id, "role": user.role,"email": user.email})
         response = make_response('Setting the cookie')
-        response.set_cookie('token',access_token)
+        response.set_cookie('token',access_token,max_age=60*60*24*7)
         return response, 200
     return jsonify({"error": "Invalid credentials"}), 401

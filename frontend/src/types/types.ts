@@ -15,7 +15,8 @@ type tokenPayload = {
 type User = {
     email: string;
     id: number;
-    location: string;
+    lat: string;
+    lon: string;
     name: string;
 }
 export type { tokenPayload, User };

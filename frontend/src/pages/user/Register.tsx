@@ -5,7 +5,8 @@ interface RegisterFormData {
   name: string;
   email: string;
   password: string;
-  location: string;
+  lat: string;
+  lon: string;
   role: "user" | "admin";
 }
 
@@ -14,7 +15,8 @@ function RegisterPage() {
     name: "",
     email: "",
     password: "",
-    location: "",
+    lat: "",
+    lon: "",
     role: "user",
   });
 
@@ -30,7 +32,8 @@ function RegisterPage() {
           const lon = position.coords.longitude.toFixed(5);
           setFormData((prev) => ({
             ...prev,
-            location: `${lat}, ${lon}`,
+            lat: lat,
+            lon: lon,
           }));
           setMessage("");
         },
@@ -113,15 +116,26 @@ function RegisterPage() {
         />
 
         <div className="flex items-center gap-2 mb-4">
-          <input
-            className="flex-1 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-            type="text"
-            name="location"
-            placeholder="Location"
-            value={formData.location}
-            onChange={handleChange}
-            readOnly
-          />
+          <div className="flex gap-2 flex-col">
+            <input
+              className="flex-1 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+              type="text"
+              name="lat"
+              placeholder="Latitude"
+              value={formData.lat}
+              onChange={handleChange}
+              readOnly
+            />
+            <input
+              className="flex-1 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+              type="text"
+              name="lon"
+              placeholder="Longitude"
+              value={formData.lon}
+              onChange={handleChange}
+              readOnly
+            />
+          </div>
           <button
             type="button"
             onClick={requestLocation}

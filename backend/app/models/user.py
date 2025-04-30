@@ -6,4 +6,5 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
     role = db.Column(db.String(20), default="user")  # admin/user
-    location = db.Column(db.String(200))
+    lat = db.Column(db.Float, nullable=True)
+    lon = db.Column(db.Float, nullable=True)
