@@ -1,5 +1,5 @@
 import React from "react";
-import { CloudHail, Activity, Home, Users } from "lucide-react";
+import { CloudHail, Activity, Home, Users, Inbox } from "lucide-react";
 import { CycloneIcon, FloodIcon, LandslideIcon } from "../components/icons/Sidebar-Icons";
 type SidebarItem = {
   href: string;
@@ -50,5 +50,10 @@ const sidebarAdminItems: SidebarItem[] = [
     label: "Users",
     icon: Users,
   },
+  {
+    href: "/admin/inbox",
+    label: "Inbox",
+    icon: Inbox
+  }
 ];
 export { sidebarUserItems, sidebarAdminItems };

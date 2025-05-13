@@ -26,6 +26,7 @@ def create_app():
     from .routes.current_weather import current_weather_bp
     from .routes.admin.users import users_bp
     from .routes.admin.location import location_fetcher_bp
+    from .routes.inbox import inbox_bp
     
     app.register_blueprint(auth_bp, url_prefix="/api")
     app.register_blueprint(forecast_bp, url_prefix="/api/forecast")
@@ -33,4 +34,5 @@ def create_app():
     app.register_blueprint(current_weather_bp, url_prefix="/api/current_weather")
     app.register_blueprint(users_bp, url_prefix="/api/admin")
     app.register_blueprint(location_fetcher_bp, url_prefix="/api/admin/location")
+    app.register_blueprint(inbox_bp,url_prefix="/api/inbox")
     return app

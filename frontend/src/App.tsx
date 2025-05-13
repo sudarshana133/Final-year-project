@@ -17,6 +17,8 @@ const DashboardWeather = lazy(() => import("./pages/user/Dashboard"));
 const AdminLayout = lazy(() => import("./components/admin/AdminLayout"));
 const Users = lazy(() => import("./pages/admin/Users"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const Inbox = lazy(() => import("./pages/admin/Inbox"));
+const IndividualEmail = lazy(() => import("./pages/admin/IndividualEmail"));
 
 const App = () => {
   return (
@@ -41,6 +43,8 @@ const App = () => {
             <Route path="/admin" element={<AdminLayout />}>
               <Route index path="" element={<AdminDashboard />} />
               <Route path="users" element={<Users />} />
+              <Route path="inbox" element={<Inbox />} />
+              <Route path=":id" element={<IndividualEmail />} />
             </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
