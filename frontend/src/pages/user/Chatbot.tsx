@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import { marked } from "marked";
 
 interface ChatEntry {
   prompt: string;
@@ -18,15 +19,18 @@ const Chatbot: React.FC = () => {
     setIsLoading(true);
     try {
       setUserInput("");
-      const response = await axios.post("https://api.example.com/chatbot", {
-        prompt: userInput,
-      });
-
+      const response = await axios.post(
+        "http://localhost:5000/api/chatbot/chat",
+        {
+          prompt: userInput,
+        }
+      );
+      const responseHtml = marked.parse(response.data.answer || "").toString();
       setChatHistory((prev) => [
         ...prev,
         {
           prompt: userInput,
-          response: response.data.answer || "No response from API",
+          response: responseHtml || "No response from API",
         },
       ]);
       setUserInput("");
@@ -62,9 +66,10 @@ const Chatbot: React.FC = () => {
             </div>
             <div className="flex justify-end">
               <div className="max-w-xl px-4 py-3 bg-blue-100 rounded-lg shadow">
-                <p className="text-gray-800 whitespace-pre-wrap">
-                  {chat.response}
-                </p>
+                <p
+                  className="text-gray-800 whitespace-pre-wrap"
+                  dangerouslySetInnerHTML={{ __html: chat.response }}
+                />
               </div>
             </div>
           </div>
